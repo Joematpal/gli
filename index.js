@@ -14,17 +14,7 @@ const argv = require('minimist')(process.argv.slice(2), {
 });
 const {log, error} = console;
 
-
-function frmtBranchName(message) {
-  let counter = 0
-  function sort(ele){
-    switch(ele) {
-      case ' ': return '-';
-      case '.': return '';
-    }
-  }
-  return message.replace(/\s/, '/').replace(/[\s.]/g, sort).toLowerCase();
-}
+const {frmtBranchName} = require('./lib/format');
 
 function frmtMessage(message) {
   return message.replace(/\./g, '').slice(0,1).toUpperCase() + message.slice(1) + '.';
@@ -56,14 +46,16 @@ if (argv.help) console.log('--rename + -m or -rn or -rm');
 
 if(argv.rename) {
   if (argv.message) {
-     exec(`git symbolic-ref --short HEAD`, (er, current_branch, se) => {
+    const message = frmtMessage(argv.message);
+    const branchName = argv.b ? arg.b : frmtBranchName(message);
+    argv.x && console.log(`git branch -m ${branchName}  && git commit --amend -m\'${message}\' && git push --set-upstream origin ${branchName}`)
+    !argv.x && exec(`git symbolic-ref --short HEAD`, (er, current_branch, se) => {
       log('current_branch', current_branch);
       if (er) {
         console.error(`exec error: ${er}`);
         return;
       }
-      const message = frmtMessage(argv.message);
-      const branchName = argv.b ? arg.b : frmtBranchName(message);
+
       !argv.x && exec(`git push origin :${current_branch}`,
       (error, stdout, stderr) => {
         if (error) {
