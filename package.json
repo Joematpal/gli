@@ -13,6 +13,7 @@
     "gli": "./index.js"
   },
   "dependencies": {
+    "g": "^2.0.1",
     "minimist": "^1.2.0"
   }
 }
