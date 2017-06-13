@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-// const { exec } = require('child_process');
 
 const argv = require('minimist')(process.argv.slice(2), {
     alias: {
@@ -12,7 +11,6 @@ const argv = require('minimist')(process.argv.slice(2), {
        d: 'delete'
     }
 });
-const { log } = console;
 
 const { frmtBranchName, frmtCommitMessage } = require('./lib/format');
 const { exec:{execCmd:exec, execCb}, strCmds } = require('./lib/bash');
@@ -30,7 +28,6 @@ if(argv.rename) {
     const { current_branch, deleteBranch, renameCommitPush } = strCmds(argv);
 
     argv.x && console.log(renameCommitPush);
-
     !argv.x && exec(deleteBranch(), exec(renameCommitPush))
   }
 }
