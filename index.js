@@ -27,7 +27,7 @@ if(argv.rename) {
     argv.branchName = argv.b ? argv.b : frmtBranchName(argv.message);
     const { current_branch, deleteBranch, renameCommitPush } = strCmds(argv);
 
-    argv.x && console.log(renameCommitPush);
-    !argv.x && exec(deleteBranch(), exec(renameCommitPush))
+    argv.x && console.log(deleteBranch(), renameCommitPush);
+    !argv.x && exec(deleteBranch(), exec.bind(null, renameCommitPush))
   }
 }
