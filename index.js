@@ -1,33 +1,64 @@
 #!/usr/bin/env node
+const { exec:cmd } = require('child_process');
 
 const argv = require('minimist')(process.argv.slice(2), {
     alias: {
-       m: 'message',
-       n: 'message',
-       x: 'dry-run',
-       b: 'branch',
-       h: 'help',
-       r: 'rename',
-       d: 'delete'
+      a: 'add',
+      b: 'branch',
+      d: 'delete',
+      e: 'noedit',
+      h: 'help',
+      m: 'message',
+      n: 'message',
+      r: 'rename',
+      x: 'dry-run',
     }
 });
 
 const { frmtBranchName, frmtCommitMessage } = require('./lib/format');
-const { exec:{execCmd:exec, execCb}, strCmds } = require('./lib/bash');
+const { exec:
+  { execCmd:
+    exec,
+    execCb,
+    nextExec,
+  },
+  strCmds,
+} = require('./lib/bash');
 
-if (argv.delete) {
-  argv.x && console.log(deleteBranch(argv.delete))
-  !argv.x && exec(deleteBranch(argv.delete));
+
+if (argv.check){
+  if (argv.check === true){
+    argv.check = '';
+  }
+  const { checkBranch } = strCmds(argv)
+  argv.x && console.log(checkBranch)
+  !argv.x && exec(checkBranch)
 }
 
-if(argv.rename) {
-  if (argv.message) {
+if (argv.delete) {
 
-    argv.message = frmtCommitMessage(argv.message);
-    argv.branchName = argv.b ? argv.b : frmtBranchName(argv.message);
-    const { current_branch, deleteBranch, renameCommitPush } = strCmds(argv);
+  const { checkBranch, deleteRemoteBranch, deleteLocalBranch } = strCmds(argv);
 
-    argv.x && console.log(renameCommitPush);
-    !argv.x && exec(deleteBranch(), exec(renameCommitPush))
-  }
+  argv.x && console.log(checkBranch, deleteLocalBranch, deleteRemoteBranch);
+
+  !argv.x && exec(checkBranch, {
+    thn: deleteLocalBranch,
+    suc: deleteRemoteBranch,
+  });
+}
+
+if (argv.add && argv.noedit && argv.commit)
+
+if(argv.rename && argv.message) {
+
+  argv.message = frmtCommitMessage(argv.message);
+  argv.branchName = argv.b ? argv.b : frmtBranchName(argv.message);
+  const { current_branch, deleteBranch, renameCommitPush, checkBranch, deleteRemoteBranch, renameBranch } = strCmds(argv);
+
+  argv.x && console.log(deleteBranch(), renameCommitPush);
+
+  !argv.x && exec(checkBranch, {
+    suc: deleteRemoteBranch,
+    thn: renameCommitPush,
+  });
 }
