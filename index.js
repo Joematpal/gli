@@ -42,22 +42,24 @@ if (argv.delete) {
   argv.x && console.log(checkBranch, deleteLocalBranch, deleteRemoteBranch);
 
   !argv.x && exec(checkBranch, {
-    thn: deleteLocalBranch,
     suc: deleteRemoteBranch,
+    thn: deleteLocalBranch,
   });
 }
 
-if (argv.help) console.log(
-`
-Options:
-  -h, --help              usage information
-  -rn, -rm ,--rename + -m how to rename
-  -b, --branch            change branch name
-  -c, --check             check if there is a remote of a branch
-`
-);
+if (argv.help) console.log(require('./lib/help'));
 
-// if (argv.add && argv.noedit && argv.commit){}
+if (argv.add && !argv.commit && !argv.noedit){
+
+}
+
+if (argv.add && argv.commit && !argv.noedit){
+
+}
+
+if (argv.add && argv.commit && argv.noedit){
+
+}
 
 if(argv.rename && argv.message) {
   argv.message = frmtCommitMessage(argv.message);
