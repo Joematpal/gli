@@ -47,10 +47,19 @@ if (argv.delete) {
   });
 }
 
-if (argv.add && argv.noedit && argv.commit)
+if (argv.help) console.log(
+`
+Options:
+  -h, --help              usage information
+  -rn, -rm ,--rename + -m how to rename
+  -b, --branch            change branch name
+  -c, --check             check if there is a remote of a branch
+`
+);
+
+// if (argv.add && argv.noedit && argv.commit){}
 
 if(argv.rename && argv.message) {
-
   argv.message = frmtCommitMessage(argv.message);
   argv.branchName = argv.b ? argv.b : frmtBranchName(argv.message);
   const { current_branch, deleteBranch, renameCommitPush, checkBranch, deleteRemoteBranch, renameBranch } = strCmds(argv);
