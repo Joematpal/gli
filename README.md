@@ -1,10 +1,10 @@
-#about
+# About
 A git abstraction tool for chained commands.
 
-#purpose
+# Purpose
 The purpose of this repo is to practice making a 'modularized' tool.
 
-#install
+# Install
 ```
  npm i -g && npm i
 ```
